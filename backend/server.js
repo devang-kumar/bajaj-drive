@@ -19,6 +19,12 @@ app.post("/bfhl", (req, res) => {
     });
 });
 
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        success: true,
+        service: "Hierarchy Analyzer API"
+    });
+});
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT);
