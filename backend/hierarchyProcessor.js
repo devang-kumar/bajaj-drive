@@ -1,4 +1,3 @@
-
 const VALID_EDGE = /^[A-Z]->[A-Z]$/;
 
 function processHierarchy(data) {
@@ -67,39 +66,52 @@ function processHierarchy(data) {
 
         while (queue.length) {
             const node = queue.shift();
+
             if (component.has(node)) continue;
 
             component.add(node);
 
-            for (const child of (adjacency.get(node) || [])) queue.push(child);
-            for (const parent of (reverse.get(node) || [])) queue.push(parent);
+            for (const child of adjacency.get(node) || []) {
+                queue.push(child);
+            }
+
+            for (const parent of reverse.get(node) || []) {
+                queue.push(parent);
+            }
         }
 
         return component;
     }
 
-    function componentHasCycle(component) {
-        const state = new Map();
+    function hasCycle(component) {
+        const color = new Map();
 
-        const dfs = (node) => {
-            state.set(node, 1);
+        function dfs(node) {
+            color.set(node, 1);
 
-            for (const child of (adjacency.get(node) || [])) {
+            for (const child of adjacency.get(node) || []) {
                 if (!component.has(child)) continue;
 
-                const childState = state.get(child) || 0;
+                const state = color.get(child) || 0;
 
-                if (childState === 1) return true;
-                if (childState === 0 && dfs(child)) return true;
+                if (state === 1) {
+                    return true;
+                }
+
+                if (state === 0 && dfs(child)) {
+                    return true;
+                }
             }
 
-            state.set(node, 2);
+            color.set(node, 2);
             return false;
-        };
+        }
 
         for (const node of component) {
-            if ((state.get(node) || 0) === 0) {
-                if (dfs(node)) return true;
+            if ((color.get(node) || 0) === 0) {
+                if (dfs(node)) {
+                    return true;
+                }
             }
         }
 
@@ -108,6 +120,7 @@ function processHierarchy(data) {
 
     function buildTree(node) {
         const result = {};
+
         const children = adjacency.get(node) || [];
 
         for (const child of children) {
@@ -117,25 +130,29 @@ function processHierarchy(data) {
         return result;
     }
 
-    function depth(node) {
+    function getDepth(node) {
         const children = adjacency.get(node) || [];
 
-        if (!children.length) return 1;
-
-        let maxDepth = 0;
-
-        for (const child of children) {
-            maxDepth = Math.max(maxDepth, depth(child));
+        if (children.length === 0) {
+            return 1;
         }
 
-        return maxDepth + 1;
+        let longest = 0;
+
+        for (const child of children) {
+            longest = Math.max(longest, getDepth(child));
+        }
+
+        return longest + 1;
     }
 
     const processed = new Set();
+
     const hierarchies = [];
 
     let total_trees = 0;
     let total_cycles = 0;
+
     let largest_tree_root = "";
     let largestDepth = -1;
 
@@ -146,17 +163,20 @@ function processHierarchy(data) {
 
         const component = getComponent(node);
 
-        for (const n of component) processed.add(n);
+        component.forEach(n => processed.add(n));
 
         const componentNodes = [...component].sort();
 
-        const roots = componentNodes.filter(n => !parentOf.has(n));
+        const roots = componentNodes.filter(
+            n => !parentOf.has(n)
+        );
 
-        const root = roots.length ? roots[0] : componentNodes[0];
+        const root =
+            roots.length > 0
+                ? roots[0]
+                : componentNodes[0];
 
-        const hasCycle = componentHasCycle(component);
-
-        if (hasCycle) {
+        if (hasCycle(component)) {
             total_cycles++;
 
             hierarchies.push({
@@ -172,26 +192,31 @@ function processHierarchy(data) {
             [root]: buildTree(root)
         };
 
-        const treeDepth = depth(root);
+        const depth = getDepth(root);
 
         total_trees++;
 
         if (
-            treeDepth > largestDepth ||
-            (treeDepth === largestDepth && root < largest_tree_root)
+            depth > largestDepth ||
+            (
+                depth === largestDepth &&
+                root < largest_tree_root
+            )
         ) {
-            largestDepth = treeDepth;
+            largestDepth = depth;
             largest_tree_root = root;
         }
 
         hierarchies.push({
             root,
             tree,
-            depth: treeDepth
+            depth
         });
     }
 
-    hierarchies.sort((a, b) => a.root.localeCompare(b.root));
+    hierarchies.sort((a, b) =>
+        a.root.localeCompare(b.root)
+    );
 
     return {
         hierarchies,
