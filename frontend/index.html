@@ -1,26 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Hierarchy Analyzer</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchy Analyzer</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-<h1>Hierarchy Analyzer</h1>
-<textarea id="nodes" placeholder="Enter edges separated by commas
+
+    <div class="container">
+
+        <div class="header">
+            <h1>Hierarchy Analyzer</h1>
+            <p>Analyze trees, cycles, duplicates and invalid entries</p>
+        </div>
+
+        <div class="input-card">
+            <textarea
+                id="nodes"
+                placeholder="Enter edges separated by commas
+
 Example:
-A->B,A->C,B->D"></textarea>
-<button id="submitBtn">Submit</button>
-<div id="error"></div>
-<div id="error"></div>
+A->B,A->C,B->D"
+            ></textarea>
 
-<div id="summaryCards"></div>
+            <button id="submitBtn">
+                Analyze Hierarchy
+            </button>
+        </div>
 
-<div id="hierarchies"></div>
+        <div id="error"></div>
 
-<div id="extraInfo"></div>
-</div>
-<script src="script.js"></script>
+        <div id="summaryCards"></div>
+
+        <div id="hierarchies"></div>
+
+        <div id="extraInfo"></div>
+
+    </div>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
