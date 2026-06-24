@@ -87,6 +87,81 @@ pre{
     border:1px solid #374151;
 }
 
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:16px;
+    margin-top:24px;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    border-left:5px solid #2563eb;
+}
+
+.card h3{
+    margin-bottom:10px;
+    color:#1f2937;
+}
+
+.card p{
+    color:#4b5563;
+    margin:6px 0;
+}
+
+.tree-card{
+    margin-top:20px;
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.tree-card.cycle{
+    border-left:5px solid #dc2626;
+}
+
+.tree-card.tree{
+    border-left:5px solid #16a34a;
+}
+
+.tree-json{
+    margin-top:12px;
+    background:#f8fafc;
+    padding:12px;
+    border-radius:8px;
+    overflow:auto;
+}
+
+.badge{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.badge-cycle{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.badge-tree{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.list-card{
+    margin-top:20px;
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
 @media(max-width:768px){
     .container{
         padding:20px;
